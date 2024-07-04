@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Frontend",
+        "type": "shell",
+        "command": "npm start",
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Start Backend",
+        "type": "shell",
+        "command": "pipenv run python manage.py runserver",
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Start All",
+        "dependsOn": [
+          "Start Frontend",
+          "Start Backend"
+        ],
+        "dependsOrder": "parallel",
+        "runOptions": {
+          "runOn": "folderOpen"
+      },
+        "problemMatcher": []
+      }
+    ]
+  }
+  

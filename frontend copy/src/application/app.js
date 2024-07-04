@@ -1,7 +1,7 @@
 import 'vite/modulepreload-polyfill';
 
 // Entry point for CSS styles
-import "../styles/app.css";
+import "../styles/style.css";
 
 window.onload = () => {
     import("../../src/components/scene").then(module => {

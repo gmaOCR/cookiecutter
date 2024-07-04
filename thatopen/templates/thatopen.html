@@ -1,77 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .full-screen {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-      
-        .options-menu{
-          position: fixed;
-          min-width: unset;
-          top: 5px;
-          right: 5px;
-          max-height: calc(100vh - 10px);
-        }
-      </style>
-
-      <bim-grid id="grid">
-        <bim-toolbars-container style="grid-area: header">
-          <bim-toolbar label="Toolbar A" active>
-            <bim-toolbar-section label="Build">
-              <bim-button vertical label="My Button" icon="solar:bookmark-square-minimalistic-bold"></bim-button>
-              <bim-toolbar-group>
-                <bim-button icon="solar:album-bold"></bim-button>
-                <bim-button icon="solar:archive-linear"></bim-button>
-                <bim-button icon="solar:battery-charge-minimalistic-broken"></bim-button>
-                <bim-button icon="solar:bluetooth-square-outline"></bim-button>
-              </bim-toolbar-group>
-            </bim-toolbar-section>
-          </bim-toolbar>
-          <bim-toolbar label="Toolbar B">
-            <bim-toolbar-section label="Section">
-              <bim-button vertical label="Button A" icon="bx:command"></bim-button>
-              <bim-button vertical label="Button B" icon="bx:fast-forward-circle"></bim-button>
-              <bim-button vertical label="Button C" icon="bx:support"></bim-button>
-            </bim-toolbar-section>
-          </bim-toolbar>
-        </bim-toolbars-container>
-        <div id="my-panel" style="grid-area: sidebar; background-color: var(--bim-ui_bg-base)">
-          <bim-panel label="Panel A">
-            <bim-panel-section label="Build">
-              <bim-text-input label="Tool Name" value="BCFManager"></bim-text-input>
-              <bim-input label="Position" vertical>
-                <bim-number-input pref="X" min="1" value="10" max="50" suffix="m" slider></bim-number-input>
-                <bim-number-input pref="X" min="1" value="20" max="50" suffix="m" slider></bim-number-input>
-                <bim-number-input pref="X" min="1" value="30" max="50" suffix="m" slider></bim-number-input>
-              </bim-input>
-              <bim-dropdown label="IFC Entity">
-                <bim-option label="IFCWALL"></bim-option>
-                <bim-option label="IFCWINDOW"></bim-option>
-                <bim-option label="IFCSLAB"></bim-option>
-              </bim-dropdown>
-            </bim-panel-section>
-          </bim-panel>
-        </div>
-      </bim-grid>
-
-
-
-
+    {% comment %} <link rel="icon" type="image/svg+xml" href="/vite.svg" /> {% endcomment %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page title</title>
+    <title>BIM App</title>
     {% load django_vite %}
     {% vite_hmr_client %}
     {# path of your vite assets are relative to the frontend directory #}
-    <div id="container" class="full-screen"></div>
-
-    {% vite_asset 'src/application/app.js' %}
 </head>
 <body>
-    ...
+  <bim-grid id="app"></bim-grid>
+  {% vite_asset 'src/main.ts' %}
 </body>
 </html>

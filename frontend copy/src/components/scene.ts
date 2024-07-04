@@ -1,8 +1,8 @@
 import * as OBC from "@thatopen/components";
 import { initializeClipper } from '../components/clipper';
-import * as THREE from "three";
 
-const container = document.getElementById("container")!;
+
+const container = document.getElementById("app")!;
 
 const components = new OBC.Components();
 
@@ -33,12 +33,9 @@ const fragments = components.get(OBC.FragmentsManager);
 const fragmentIfcLoader = components.get(OBC.IfcLoader);
 
 
-
-
 export async function initClipperInScene() {
   const result = await initializeClipper();
   if (result) {
-    console.log('result:', result)
     const { clipper, casters } = result;
     // console.log('Clipper:', clipper);
     // console.log('Casters:', casters);
@@ -51,10 +48,10 @@ export async function initClipperInScene() {
     if (container) {
       // console.log("Container found:", container); 
       container.ondblclick = () => {
-        console.log("Double click detected");
+        // console.log("Double click detected");
         if (clipper.enabled) {
           clipper.create(world);
-          console.log("Clipper is created:", clipper)
+          // console.log("Clipper is created:", clipper)
         } else {
           console.log("Clipper is not enabled");
       }
@@ -69,7 +66,6 @@ export async function initClipperInScene() {
         }
       }
     };
-    console.log("Material", clipper.material);
     return clipper;
   } else {
     console.error("Initialization failed.");

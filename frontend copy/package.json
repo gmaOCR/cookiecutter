@@ -12,7 +12,6 @@
   "dependencies": {
     "@thatopen/components-front": "^2.0.20",
     "@thatopen/ui-obc": "^2.0.12",
-    "jszip": "^3.10.1",
     "stats": "^1.0.0",
     "stats.js": "^0.17.0",
     "web-ifc": "^0.0.55"

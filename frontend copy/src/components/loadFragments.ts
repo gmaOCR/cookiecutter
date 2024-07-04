@@ -1,5 +1,6 @@
 import * as WEBIFC from "web-ifc";
 import Stats from "stats.js";
+import * as THREE from "three";
 import { fragmentIfcLoader, fragments, world } from './scene';
 
 
@@ -21,7 +22,7 @@ async function configureAndSetupLoader() {
 
     fragmentIfcLoader.settings.webIfc.COORDINATE_TO_ORIGIN = true;
 
-    console.log("fragmentIfcLoader setup completed successfully!");
+    // console.log("fragmentIfcLoader setup completed successfully!");
   } catch (error) {
     console.error("Error during fragmentIfcLoader setup:", error);
     // Gestion des erreurs : affichez ou traitez l'erreur selon vos besoins
@@ -45,7 +46,15 @@ export async function loadIfc() {
     // Vérifiez que world.renderer est défini avant d'accéder à world.scene.three
     if (world.renderer) {
       world.scene.three.add(model);
-      world.meshes.add(model);
+      for (const child of model.children) {
+
+        if (child instanceof THREE.Mesh) {
+    
+          world.meshes.add(child);
+    
+        }
+    
+      }
     } else {
       console.warn("world.renderer is null or undefined. Model not added to scene.");
     }
@@ -57,7 +66,7 @@ export async function loadIfc() {
 
 // Événement lors du chargement des fragments
 fragments.onFragmentsLoaded.add((model) => {
-  console.log("Fragments loaded:", model);
+  // console.log("Fragments loaded:", model);
 });
 
 // Fonction pour télécharger un fichier

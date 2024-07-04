@@ -11,7 +11,7 @@ export async function initializeFragmentBbox() {
       // console.log("Model added to fragmentBbox:", model);
       const bbox = fragmentBbox.getMesh();
       fragmentBbox.reset();
-      console.log("BoundingBox mesh retrieved and reset successfully.");
+      // console.log("BoundingBox mesh retrieved and reset successfully.");
       return bbox;
     } catch (error) {
       console.error("Failed to add model to fragmentBbox:", error);

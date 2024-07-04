@@ -1,15 +1,18 @@
 import * as BUI from "@thatopen/ui";
+import * as CUI from '@thatopen/ui-obc'
 import { loadIfc, exportFragments, disposeFragments } from '../components/loadFragments';
 import * as Effect from '../components/meshEffects';
 import { world } from '../components/scene';
 import { initializeFragmentBbox } from '../components/boundingBox';
 import { initClipperInScene } from '../components/scene';
+import { initPropTables, initIndexer } from './elementProperties';
 
 // Initialisation du gestionnaire d'UI BUI
 BUI.Manager.init();
 
 let bbox: any;
 let clipper: any;
+
 
 // Fonction pour initialiser bbox et créer le panneau de contrôle
 async function initPanel() {
@@ -21,16 +24,15 @@ async function initPanel() {
     // console.log("BBox initialisée:", bbox);
 
     clipper = await initClipperInScene();
-    console.log("Clipper", clipper)
     
     if (!clipper) {
       throw new Error("Clipper is undefined");
     }
-    console.log("Clipper initialisée:", clipper);
+    // console.log("Clipper initialisée:", clipper);
 
 
     // Création du panneau de contrôle UI
-    const panel = BUI.Component.create<BUI.PanelSection>(() => {
+    const panel = BUI.Component.create(() => {
       return BUI.html`
         <bim-panel active label="Menu" class="options-menu">
           <bim-panel-section collapsed label="IFC/Fragments">
@@ -117,27 +119,78 @@ async function initPanel() {
 
     document.body.append(panel);
 
-    // Création d'un bouton pour le menu sur mobile
-    // const button = BUI.Component.create<BUI.PanelSection>(() => {
-    //   return BUI.html`
-    //     <bim-button class="phone-menu-toggler" icon="solar:settings-bold"
-    //       @click="${() => {
-    //         if (panel.classList.contains("options-menu-visible")) {
-    //           panel.classList.remove("options-menu-visible");
-    //         } else {
-    //           panel.classList.add("options-menu-visible");
-    //         }
-    //       }}">
-    //     </bim-button>
-    //   `;
-    // });
-
-    // document.body.append(button);
-
   } catch (error) {
     console.error("Failed to initialize the panel", error);
   }
 }
 
+async function initProperties() {
+
+  try {
+    const propTables = await initPropTables();
+    if (propTables) {
+      const { propertiesTable, updatePropertiesTable, highlighter } = propTables;
+      console.log("Tables des propriétés:", propertiesTable);
+      console.log("Fonction de mise à jour des tables des propriétés:", updatePropertiesTable);
+      // console.log("Highlighter:", highlighter);
+
+      const propertiesPanel = BUI.Component.create(() => {
+        const onTextInput = (e: Event) => {
+          const input = e.target as BUI.TextInput;
+          propertiesTable.queryString = input.value !== "" ? input.value : null;
+        };
+
+        const expandTable = (e: Event) => {
+          const button = e.target as BUI.Button;
+          propertiesTable.expanded = !propertiesTable.expanded;
+          button.label = propertiesTable.expanded ? "Collapse" : "Expand";
+        };
+
+        const copyAsTSV = async () => {
+          await navigator.clipboard.writeText(propertiesTable.tsv);
+        };
+
+        return BUI.html`
+          <bim-panel label="Properties">
+            <bim-panel-section label="Element Data">
+              <div style="display: flex; gap: 0.5rem;">
+                <bim-button @click=${expandTable} label=${propertiesTable.expanded ? "Collapse" : "Expand"}></bim-button> 
+                <bim-button @click=${copyAsTSV} label="Copy as TSV"></bim-button> 
+              </div> 
+              <bim-text-input @input=${onTextInput} placeholder="Search Property" debounce="250"></bim-text-input>
+              ${propertiesTable}
+            </bim-panel-section>
+          </bim-panel>
+        `;
+      });
+
+      const viewport = document.createElement("bim-viewport");
+
+      const app = document.createElement("bim-grid");
+      app.layouts = {
+        main: {
+          template: `
+            "propertiesPanel viewport"
+            /25rem 1fr
+          `,
+          elements: { propertiesPanel, viewport },
+        },
+      };
+
+      app.layout = "main";
+      document.body.append(app);
+    } else {
+      console.error("Échec de l'initialisation des tables des propriétés.");
+    }
+  } catch (error) {
+    console.error("Failed to initialize the properties panel", error);
+  }
+}
+
+
+
 // Appel de la fonction d'initialisation
+// initIndexer();
+
+initProperties();
 initPanel();

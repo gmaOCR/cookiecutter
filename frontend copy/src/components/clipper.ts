@@ -9,7 +9,7 @@ export async function initializeClipper() {
     //   console.log("Raycasters activated successfully.");
   
       const clipper = components.get(OBC.Clipper);
-      console.log("Clipper activated successfully.");
+      // console.log("Clipper activated successfully.");
   
       return { clipper, casters };
     } catch (error) {
